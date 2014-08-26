@@ -20,3 +20,8 @@ Usage of whackanop:
 ## Installation
 
 `go get github.com/Clever/whackanop`
+
+## Local Development
+
+Set this repository up in the [standard location](https://golang.org/doc/code.html) in your `GOPATH`, i.e. `$GOPATH/src/github.com/Clever/whackanop`.
+Once this is done, `make test` runs the tests.
