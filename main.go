@@ -93,7 +93,13 @@ func main() {
 	interval := flags.Int("interval", 1, "how often, in seconds, to poll mongo for operations")
 	querystr := flags.String("query", `{"op": "query", "secs_running": {"$gt": 60}}`, "query sent to db.currentOp()")
 	debug := flags.Bool("debug", true, "in debug mode, operations that match the query are logged instead of killed")
+	version := flags.Bool("version", false, "print the version and exit")
 	flags.Parse(os.Args[1:])
+
+	if *version {
+		fmt.Println(Version)
+		os.Exit(0)
+	}
 
 	var query bson.M
 	if err := json.Unmarshal([]byte(*querystr), &query); err != nil {

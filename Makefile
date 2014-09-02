@@ -12,7 +12,7 @@ RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
 
 test: $(PKG)
 
-$(PKG):
+$(PKG): version.go
 	go get github.com/golang/lint/golint
 	$(GOPATH)/bin/golint $(GOPATH)/src/$@*/**.go
 	go get -d -t $@
@@ -20,6 +20,12 @@ $(PKG):
 ifeq ($(HTMLCOV),1)
 	go tool cover -html=$(GOPATH)/src/$@/c.out
 endif
+
+build/*: version.go
+version.go: VERSION
+	echo 'package main' > version.go
+	echo '' >> version.go # Write a go file that lints :)
+	echo 'const Version = "$(VERSION)"' >> version.go
 
 build/$(EXECUTABLE)-v$(VERSION)-darwin-amd64:
 	GOARCH=amd64 GOOS=darwin go build -o "$@/$(EXECUTABLE)"
