@@ -38,4 +38,4 @@ release: $(RELEASE_ARTIFACTS)
 clean:
 	rm -rf build release
 
-.PHONY: test $(PKGS) clean github-release
+.PHONY: test $(PKGS) clean
