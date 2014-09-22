@@ -33,19 +33,9 @@ From there you can build release tarballs for different OS and architecture comb
 ### Rolling an official release
 
 Official releases are listed on the [releases](https://github.com/Clever/whackanop/releases) page.
-Steps to create an official release:
+To create an official release:
 
-1. Rebase your feature branch on master.
+1. On `master`, bump the version in the `VERSION` file in accordance with [semver](http://semver.org/).
 
-2. Make a commit that bumps the version in the `VERSION` file. Tag this commit with the version as well: `git tag vX.Y.X`.
-See [http://semver.org/](http://semver.org/) for how to determine what version change you should make for your changes.
-[gitsem](https://github.com/clever/gitsem) is a command that can help with this step.
-
-3. Push the version change commit and tag to Github: `git push origin --tags`, and, assuming it's been signed off on, merge your pull request.
-Assuming you've rebased, this should be a fast-forward merge, and should not create a merge commit.
-Check that the tagged commit created above is indeed the final commit in master.
-
-4. Switch to master locally (`git checkout master && git pull`) and run `scripts/release_github`, passing in the required env:
-    ```
-    GITHUB_TOKEN=x GITHUB_REPO_USER=Clever GITHUB_REPO_NAME=whackanop  scripts/release_github
-    ```
+2. Push the change to Github. Drone will automatically create a release for you.
+You can do this with [`gitsem`](https://github.com/clever/gitsem), but make sure not to create the tag, e.g. `gitsem -tag=false patch`.
