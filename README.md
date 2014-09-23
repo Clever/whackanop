@@ -36,6 +36,6 @@ Official releases are listed on the [releases](https://github.com/Clever/whackan
 To create an official release:
 
 1. On `master`, bump the version in the `VERSION` file in accordance with [semver](http://semver.org/).
+You can do this with [`gitsem`](https://github.com/clever/gitsem), but make sure not to create the tag, e.g. `gitsem -tag=false patch`.
 
 2. Push the change to Github. Drone will automatically create a release for you.
-You can do this with [`gitsem`](https://github.com/clever/gitsem), but make sure not to create the tag, e.g. `gitsem -tag=false patch`.
