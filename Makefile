@@ -10,10 +10,12 @@ BUILDS := \
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
 
-test: $(PKG)
+test: $(PKGS)
 
-$(PKG): version.go
+$(GOPATH)/bin/golint:
 	go get github.com/golang/lint/golint
+
+$(PKGS): version.go $(GOPATH)/bin/golint
 	$(GOPATH)/bin/golint $(GOPATH)/src/$@*/**.go
 	go get -d -t $@
 	go test -cover -coverprofile=$(GOPATH)/src/$@/c.out $@ -test.v
