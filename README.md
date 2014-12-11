@@ -6,6 +6,8 @@
 
 See [this blog post](http://blog.mongolab.com/2014/02/mongodb-currentop-killop/).
 
+Or this [StackExchange post](https://dba.stackexchange.com/questions/60029/how-do-i-safely-kill-long-running-operations-in-mongodb).
+
 ## Usage
 
 ```bash
