@@ -15,8 +15,10 @@ $ whackanop -h
 Usage of whackanop:
   -debug=true: in debug mode, operations that match the query are logged instead of killed
   -interval=1: how often, in seconds, to poll mongo for operations
-  -mongourl="localhost": mongo url to connect to
+  -mongourl="mongodb://localhost?connect=direct": mongo url to connect to. Must specify connect=direct to guarantee admin commands are run on the specified server.
   -query="{\"op\": \"query\", \"secs_running\": {\"$gt\": 60}}": query sent to db.currentOp()
+  -verbose=false: more verbose logging
+  -version=false: print the version and exit
 ```
 
 ## Installation
