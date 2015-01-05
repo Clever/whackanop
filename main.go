@@ -103,7 +103,8 @@ func validateMongoURL(mongourl string) error {
 
 func main() {
 	flags := flag.NewFlagSet("whackanop", flag.ExitOnError)
-	mongourl := flags.String("mongourl", "mongodb://localhost?connect=direct", "mongo url to connect to. Must specify connect=direct to guarantee admin commands are run on the specified server.")
+	mongourl := flags.String("mongourl", "mongodb://localhost?connect=direct",
+		"mongo url to connect to. Must specify connect=direct to guarantee admin commands are run on the specified server.")
 	interval := flags.Int("interval", 1, "how often, in seconds, to poll mongo for operations")
 	querystr := flags.String("query", `{"op": "query", "secs_running": {"$gt": 60}}`, "query sent to db.currentOp()")
 	debug := flags.Bool("debug", true, "in debug mode, operations that match the query are logged instead of killed")
