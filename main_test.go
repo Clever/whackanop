@@ -69,6 +69,7 @@ func TestDirectConnect(t *testing.T) {
 		"localhost",
 		"localhost:27017",
 		"localhsot:27017?connect=replicaSet",
+		"localhsot:27017?connect=directbutnotdirect",
 	} {
 		if err := validateMongoURL(failingtest); err == nil {
 			t.Fatalf("invalid URL should not validate: %s", failingtest)

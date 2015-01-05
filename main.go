@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
+	"regexp"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -93,7 +93,9 @@ func (wao WhackAnOp) Run() error {
 }
 
 func validateMongoURL(mongourl string) error {
-	if !strings.Contains(mongourl, "connect=direct") {
+	if matched, err := regexp.MatchString(`.*connect=direct(&.*|$)`, mongourl); err != nil {
+		return err
+	} else if !matched {
 		return fmt.Errorf("must specify 'connect=direct' in mongourl")
 	}
 	return nil
