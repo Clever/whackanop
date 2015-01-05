@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -91,31 +92,44 @@ func (wao WhackAnOp) Run() error {
 	return nil
 }
 
+func validateMongoURL(mongourl string) error {
+	if matched, err := regexp.MatchString(`.*connect=direct(&.*|$)`, mongourl); err != nil {
+		return err
+	} else if !matched {
+		return fmt.Errorf("must specify 'connect=direct' in mongourl")
+	}
+	return nil
+}
+
 func main() {
 	flags := flag.NewFlagSet("whackanop", flag.ExitOnError)
-	mongourl := flags.String("mongourl", "localhost", "mongo url to connect to")
+	mongourl := flags.String("mongourl", "mongodb://localhost?connect=direct",
+		"mongo url to connect to. Must specify connect=direct to guarantee admin commands are run on the specified server.")
 	interval := flags.Int("interval", 1, "how often, in seconds, to poll mongo for operations")
 	querystr := flags.String("query", `{"op": "query", "secs_running": {"$gt": 60}}`, "query sent to db.currentOp()")
 	debug := flags.Bool("debug", true, "in debug mode, operations that match the query are logged instead of killed")
 	version := flags.Bool("version", false, "print the version and exit")
 	verbose := flags.Bool("verbose", false, "more verbose logging")
 	flags.Parse(os.Args[1:])
-
 	if *version {
 		fmt.Println(Version)
 		os.Exit(0)
 	}
-
 	var query bson.M
 	if err := json.Unmarshal([]byte(*querystr), &query); err != nil {
 		log.Fatal(err)
 	}
 
+	if err := validateMongoURL(*mongourl); err != nil {
+		log.Fatal(err)
+	}
 	session, err := mgo.Dial(*mongourl)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer session.Close()
+	session.SetMode(mgo.Monotonic, false)
+
 	log.Printf("mongourl=%s interval=%d debug=%t query=%#v", *mongourl, *interval, *debug, query)
 
 	wao := WhackAnOp{

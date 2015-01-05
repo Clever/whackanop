@@ -1,10 +1,11 @@
 package main
 
 import (
-	"gopkg.in/mgo.v2/bson"
 	"reflect"
 	"testing"
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type mockOpKiller struct {
@@ -60,5 +61,26 @@ func TestWhackAnOp(t *testing.T) {
 	}
 	if !reflect.DeepEqual(killer.OpsKilled, ops) {
 		t.Fatalf("expected to kill %#v, got %#v", ops, killer.OpsKilled)
+	}
+}
+
+func TestDirectConnect(t *testing.T) {
+	for _, failingtest := range []string{
+		"localhost",
+		"localhost:27017",
+		"localhsot:27017?connect=replicaSet",
+		"localhsot:27017?connect=directbutnotdirect",
+	} {
+		if err := validateMongoURL(failingtest); err == nil {
+			t.Fatalf("invalid URL should not validate: %s", failingtest)
+		}
+	}
+	for _, passingtest := range []string{
+		"localhost?connect=direct",
+		"localhost:27017?connect=direct",
+	} {
+		if err := validateMongoURL(passingtest); err != nil {
+			t.Fatalf("valid URL should validate: %s", passingtest)
+		}
 	}
 }
