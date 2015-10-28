@@ -10,6 +10,13 @@ BUILDS := \
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
 
+GOVERSION := $(shell go version | grep 1.5)
+ifeq "$(GOVERSION)" ""
+  $(error must be running Go version 1.5)
+endif
+
+export GO15VENDOREXPERIMENT = 1
+
 test: $(PKGS)
 
 $(GOPATH)/bin/golint:
