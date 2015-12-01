@@ -1,0 +1,14 @@
+{
+	"ImportPath": "github.com/Clever/whackanop",
+	"GoVersion": "go1.5.1",
+	"Packages": [
+		"github.com/Clever/whackanop"
+	],
+	"Deps": [
+		{
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Comment": "r2015.01.24",
+			"Rev": "c6a7dce14133ccac2dcac3793f1d6e2ef048503a"
+		}
+	]
+}

@@ -1,14 +1,15 @@
+.PHONY: test $(PKGS) clean vendor
 VERSION := $(shell cat VERSION)
 SHELL := /bin/bash
 PKG := github.com/Clever/whackanop
-SUBPKGS :=
-PKGS := $(PKG) $(SUBPKGS)
+PKGS := $(shell go list ./... | grep -v /vendor)
 EXECUTABLE := whackanop
 BUILDS := \
 	build/$(EXECUTABLE)-v$(VERSION)-darwin-amd64 \
 	build/$(EXECUTABLE)-v$(VERSION)-linux-amd64
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
+GODEP := $(GOPATH)/bin/godep
 
 GOVERSION := $(shell go version | grep 1.5)
 ifeq "$(GOVERSION)" ""
@@ -53,12 +54,6 @@ release: $(RELEASE_ARTIFACTS)
 clean:
 	rm -rf build release
 
-.PHONY: test $(PKGS) clean
-
-
-SHELL := /bin/bash
-PKGS := $(shell go list ./... | grep -v /vendor)
-GODEP := $(GOPATH)/bin/godep
 
 $(GODEP):
 	go get -u github.com/tools/godep
