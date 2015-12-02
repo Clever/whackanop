@@ -1,8 +1,8 @@
+.PHONY: test $(PKGS) clean vendor
 VERSION := $(shell cat VERSION)
 SHELL := /bin/bash
 PKG := github.com/Clever/whackanop
-SUBPKGS :=
-PKGS := $(PKG) $(SUBPKGS)
+PKGS := $(shell go list ./... | grep -v /vendor)
 EXECUTABLE := whackanop
 BUILDS := \
 	build/$(EXECUTABLE)-v$(VERSION)-darwin-amd64 \
@@ -14,13 +14,17 @@ GOVERSION := $(shell go version | grep 1.5)
 ifeq "$(GOVERSION)" ""
   $(error must be running Go version 1.5)
 endif
-
 export GO15VENDOREXPERIMENT = 1
 
-test: $(PKGS)
-
-$(GOPATH)/bin/golint:
+GOLINT := $(GOPATH)/bin/golint
+$(GOLINT):
 	go get github.com/golang/lint/golint
+
+GODEP := $(GOPATH)/bin/godep
+$(GODEP):
+	go get -u github.com/tools/godep
+
+test: $(PKGS)
 
 $(PKGS): version.go $(GOPATH)/bin/golint
 	$(GOPATH)/bin/golint $(GOPATH)/src/$@*/**.go
@@ -53,4 +57,6 @@ release: $(RELEASE_ARTIFACTS)
 clean:
 	rm -rf build release
 
-.PHONY: test $(PKGS) clean
+vendor: $(GODEP)
+	$(GODEP) save $(PKGS)
+	find vendor/ -path '*/vendor' -type d | xargs -IX rm -r X # remove any nested vendor directories
