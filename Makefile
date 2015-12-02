@@ -9,19 +9,22 @@ BUILDS := \
 	build/$(EXECUTABLE)-v$(VERSION)-linux-amd64
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
-GODEP := $(GOPATH)/bin/godep
 
 GOVERSION := $(shell go version | grep 1.5)
 ifeq "$(GOVERSION)" ""
   $(error must be running Go version 1.5)
 endif
-
 export GO15VENDOREXPERIMENT = 1
 
-test: $(PKGS)
-
-$(GOPATH)/bin/golint:
+GOLINT := $(GOPATH)/bin/golint
+$(GOLINT):
 	go get github.com/golang/lint/golint
+
+GODEP := $(GOPATH)/bin/godep
+$(GODEP):
+	go get -u github.com/tools/godep
+
+test: $(PKGS)
 
 $(PKGS): version.go $(GOPATH)/bin/golint
 	$(GOPATH)/bin/golint $(GOPATH)/src/$@*/**.go
@@ -53,10 +56,6 @@ release: $(RELEASE_ARTIFACTS)
 
 clean:
 	rm -rf build release
-
-
-$(GODEP):
-	go get -u github.com/tools/godep
 
 vendor: $(GODEP)
 	$(GODEP) save $(PKGS)
