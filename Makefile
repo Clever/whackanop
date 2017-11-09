@@ -13,7 +13,7 @@ BUILDS := \
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
 
-$(eval $(call golang-version-check,1.8))
+$(eval $(call golang-version-check,1.9))
 
 test: $(PKGS)
 
@@ -43,5 +43,5 @@ release: $(RELEASE_ARTIFACTS)
 clean:
 	rm -rf build release
 
-vendor: golang-godep-vendor-deps
-	$(call golang-godep-vendor,$(PKGS))
+install_deps: golang-dep-vendor-deps
+	$(call golang-dep-vendor)
