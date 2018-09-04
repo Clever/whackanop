@@ -19,5 +19,4 @@ jobs:
     - run: make version.go
     - run: make install_deps
     - run: make test
-    - run: $HOME/ci-scripts/circleci/report-card $RC_DOCKER_USER $RC_DOCKER_PASS "$RC_DOCKER_EMAIL" $RC_GITHUB_TOKEN
-    
+    - run: if [ "${CIRCLE_BRANCH}" == "master" ]; then make release && $HOME/ci-scripts/circleci/github-release $GH_RELEASE_TOKEN release; fi;
