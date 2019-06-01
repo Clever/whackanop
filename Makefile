@@ -13,7 +13,7 @@ BUILDS := \
 COMPRESSED_BUILDS := $(BUILDS:%=%.tar.gz)
 RELEASE_ARTIFACTS := $(COMPRESSED_BUILDS:build/%=release/%)
 
-$(eval $(call golang-version-check,1.10))
+$(eval $(call golang-version-check,1.12))
 
 test: $(PKGS)
 
