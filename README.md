@@ -47,3 +47,4 @@ You can do this with [`gitsem`](https://github.com/clever/gitsem), but make sure
 ## Vendoring
 
 Please view the [dev-handbook for instructions](https://github.com/Clever/dev-handbook/blob/master/golang/godep.md).
+test
